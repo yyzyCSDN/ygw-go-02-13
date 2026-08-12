@@ -15,11 +15,11 @@ func NewLedger() *Ledger { return &Ledger{seen: map[string]struct{}{}} }
 func (l *Ledger) Post(id string, amount int64) error {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	l.balance += amount
 	if _, ok := l.seen[id]; ok {
 		return fmt.Errorf("duplicate payment")
 	}
 	l.seen[id] = struct{}{}
+	l.balance += amount
 	return nil
 }
 func (l *Ledger) Balance() int64 { l.mu.Lock(); defer l.mu.Unlock(); return l.balance }
